@@ -94,7 +94,17 @@
     }
 
     function editCard(ev){
-        console.log(ev);
+        var title = prompt("Edit Card Title",cards[ev-1].title);
+        var description = prompt("Edit Card Description:",cards[ev-1].description);
+        if (title == null || description == null){
+            // nth happens
+        } else {
+            let numb = cards[ev-1].columnId;
+            var data = `title=${title}&description=${description}&columnId=${numb}`;
+            httpPut('http://localhost:3000/cards/' + ev, data, function(response){
+                getJSONCol();
+            })
+        }
     }
 
     function newCard(ev){
