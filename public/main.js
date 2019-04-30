@@ -1,7 +1,7 @@
-var http = new XMLHttpRequest();
-var newCardColId;
+var ColIdForNewCard;
 var editCardObj;
 
+// Http GET method to fetch data from db.json file
 function httpGet(url, callback) {
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("readystatechange", function (responseText) {
@@ -13,7 +13,7 @@ function httpGet(url, callback) {
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.send(null);
 }
-
+// Http POST method to add data from db.json file
 function httpPost(url, data, callback) {
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("readystatechange", function (responseText) {
@@ -21,12 +21,11 @@ function httpPost(url, data, callback) {
             callback(JSON.parse(this.responseText));
         }
     });
-
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.send(data);
 }
-
+// Http PUT method to update data from db.json file
 function httpPut(url, data, callback) {
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("readystatechange", function (responseText) {
@@ -39,7 +38,7 @@ function httpPut(url, data, callback) {
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.send(data);
 }
-
+// Http PATCH method to update data from db.json file
 function httpPatch(url, data, callback) {
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("readystatechange", function (responseText) {
@@ -52,7 +51,7 @@ function httpPatch(url, data, callback) {
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.send(data);
 }
-
+// Http DELETE method to delete data from db.json file
 function httpDelete(url, callback) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() { 
@@ -62,7 +61,7 @@ function httpDelete(url, callback) {
     xhr.open("DELETE", url, true); // true for asynchronous 
     xhr.send(null);
 }
-
+// method to resize the columns based on device window height
 function alertSize() {
     var myWidth = 0, myHeight = 0;
     if( typeof( window.innerWidth ) == 'number' ) {
@@ -72,7 +71,7 @@ function alertSize() {
     }
         document.getElementsByClassName("canvas")[0].style.height = myHeight - 80 + 'px';
 }
-
+// method to toggle add another list input
 function toggleInput() {
     var x = document.getElementById("togggleList");
     if (x.style.display === "none") {
@@ -81,7 +80,7 @@ function toggleInput() {
         x.style.display = "none";
     }
 }
-
+// method to toggle card content
 function dropdownContent(){
     var acc = document.getElementsByClassName("card-title");
     var i;
@@ -96,27 +95,27 @@ function dropdownContent(){
     });
     }
 }
-
+// get column data from db.json
 function getJSONCol() {
     httpGet('http://localhost:3000/columns', function(response) {
         col = JSON.parse(response);
         getJSONCard();
     });
 }
-
+// get card data from db.json
 function getJSONCard() {
     httpGet('http://localhost:3000/cards', function(response) {
         cards = JSON.parse(response);
         setColCards();
     });
 }
-
+// delete selected card from db.json
 function deleteCard(ev){
     httpDelete('http://localhost:3000/cards/' + ev, function(response) {
         getJSONCol();
     });
 }
-
+// edit selected card from db.json
 function editCard(){
     let title = document.getElementById('editCardTitle').value;
     let description = document.getElementById('editCardDesc').value;
@@ -131,6 +130,7 @@ function editCard(){
         })
     }
 }
+// adding new card into db.json
 function newCard(){
     let title = document.getElementById('newCardTitle').value;
     let description = document.getElementById('newCardDesc').value;
@@ -145,7 +145,7 @@ function newCard(){
     } else if (checkDuplicateTitle) {
         alert("Error! Duplicate Card Title");
     } else {
-        let numb = newCardColId;
+        let numb = ColIdForNewCard;
         var data = `title=${title}&description=${description}&columnId=${numb}`;
         httpPost('http://localhost:3000/cards', data, function(response){
             getJSONCol();
@@ -153,7 +153,7 @@ function newCard(){
         })
     }
 }
-
+// adding new column to db.json
 function newList(ev){
     if (ev.keyCode === 13 || ev.type == "click") {
         var title = document.getElementById('newlist').value;
@@ -175,13 +175,13 @@ function newList(ev){
         }
     }
 }
-
+// deleting column from db.sjon
 function deleteCol(ev){
     httpDelete('http://localhost:3000/columns/' + ev, function(response) {
         getJSONCol();
     });
 }
-
+// edit column data from db.json
 function editCol(ev){
     var title = prompt("Edit Column Name:",col[ev-1].title);
     if (title == null){
@@ -194,17 +194,17 @@ function editCol(ev){
         })
     }
 }
-
+// allow drop event for draggerable object
 function allowDrop(ev) {
     ev.preventDefault();
 }
-
+// method to capture drag event when user drag a draggerable object
 function drag(ev, id) {
     let idx = cards.findIndex(p => p.id == id);
     cardShift = cards[idx];
     dragDiff = ev.screenX;
 }
-
+// method to capture drop event when user drops draggable object
 function drop(ev) {
     dropDiff = ev.screenX;
     let diff = (dragDiff - dropDiff);
@@ -224,40 +224,40 @@ function drop(ev) {
             getJSONCol();
         });
     } else {
-        // nth happens
+        // nth happens when distance between 2 columns are smaller than Math.abs(250)
     }
 }
-
+// intializing modal
 var createModal = document.getElementById('createModal');
 var modalBtn = document.getElementById('modalBtn');
 var closeBtn = document.getElementsByClassName('closeBtn')[0];
 var closeBtn2 = document.getElementsByClassName('closeBtn2')[0];
 var editModal = document.getElementById('editModal');
-
+// add listener to modal 
 modalBtn.addEventListener('click', openModal);
 closeBtn.addEventListener('click', closeModal);
 closeBtn2.addEventListener('click', closeModal);
 window.addEventListener('click', clickOutside);
-
+// opens create modal
 function openModal(ev){
-    newCardColId = ev;
+    ColIdForNewCard = ev;
     createModal.style.display = 'block';
 }
-
+// closes both create and edit modals
 function closeModal(){
     createModal.style.display = 'none';
     editModal.style.display = 'none';
     document.getElementById('newCardTitle').value = "";
     document.getElementById('newCardDesc').value = "";
 }
-
+// method to capture click outside modal event to close modal.
 function clickOutside(e){
     if (e.target == createModal || e.target == editModal){
         createModal.style.display = 'none';
         editModal.style.display = 'none';
     }
 }
-
+// open edit modal
 function openEditModal(id){
     let idx = cards.findIndex(p => p.id == id);
     editCardObj = cards[idx];
