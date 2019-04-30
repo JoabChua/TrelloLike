@@ -89,7 +89,6 @@
     }
 
     function deleteCard(ev){
-        console.log(ev);
         httpDelete('http://localhost:3000/cards/' + ev, function(response) {
             // let temp = JSON.parse(response);
             getJSONCol();
@@ -102,8 +101,10 @@
         if (title == null || description == null){
             // alert("Card creation cancelled!")
         } else {
-            let numb = ev.path[2].id;
+            let numb = ev.path[2].children[1].id;
+            // console.log(ev);
             var data = `title=${title}&description=${description}&columnId=${numb}`;
+            // console.log(data);
             httpPost('http://localhost:3000/cards', data, function(response){
                 getJSONCol();
             })
@@ -135,8 +136,10 @@
             fullView[i] = `
             <div class="list-wrapper" ondrop="drop(event)" ondragover="allowDrop(event)">
                 <h3><strong>${col[i].title}</strong></h3>
-                <div id="${col[i].id}">
+                <div class="list-cards" draggable="true" ondragstart="drag(event)" id="${col[i].id}">
                 </div>
+                <h3 style="cursor:pointer;" onclick="newCard(event)" id="myBtn">
+                <strong>+ Add another card</strong></h3>
             </div>
                 `;
             for (var j=0; j<cards.length; j++){
@@ -145,20 +148,20 @@
                         embedView[i] = "";
                     }
                     embedView[i] += `
-                    <div class="list-cards" draggable="true" ondragstart="drag(event)">
                         <div class="card" draggable="true" ondragstart="drag(event)">
                             <div class="container">
                                 <h4 class="card-title"><b>${cards[j].title}</b>
+                                <span>
                                     <button class="btn" style="float:right;" onclick="deleteCard(${cards[j].id})"><i class="fa fa-trash"></i></button>
-                                    <button class="btn" style="float:right;" onclick="editCard(event)"><i class="fa fa-edit"></i></button>
-                                    </h4>
+                                    <button class="btn" style="float:right;" onclick="editCard(event)"><i class="fa fa-edit"></i></button>    
+                                </span>
+                                </h4>
                                 
                                 <div class="card-content">
                                     <p>${cards[j].description}</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     ` ;
                 }
             }
@@ -167,9 +170,9 @@
         setTimeout(() => {
             for (var i = 0; i < col.length; i++){
                 document.getElementById(col[i].id).innerHTML = embedView[i];
-                document.getElementById(col[i].id).innerHTML += `
-                <h3 style="cursor:pointer;" onclick="newCard(event)" id="myBtn">
-                    <strong>+ Add another card</strong></h3>`;
+                // document.getElementById(col[i].id).innerHTML += `
+                // <h3 style="cursor:pointer;" onclick="newCard(event)" id="myBtn">
+                //     <strong>+ Add another card</strong></h3>`;
             }
             dropdownContent();
         }, 10);
