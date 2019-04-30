@@ -1,17 +1,17 @@
 var http = new XMLHttpRequest();
+var newCardColId;
+var editCardObj;
 
-function httpGet(url, callback)
-{
-    http.open('GET', url, true);
-    //Send the proper header information along with the request
-    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-    http.onreadystatechange = function() {//Call a function when the state changes.
-        if(http.readyState == 4 && http.status == 200) {
-            callback(http.responseText);
+function httpGet(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener("readystatechange", function (responseText) {
+        if (this.readyState === 4) {
+            callback(this.responseText);
         }
-    }
-    http.send(null);
+    });
+    xhr.open("GET", url);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(null);
 }
 
 function httpPost(url, data, callback) {
@@ -117,43 +117,39 @@ function deleteCard(ev){
     });
 }
 
-function editCard(id){
-    let idx = cards.findIndex(p => p.id == id);
-    var title = prompt("Edit Card Title",cards[idx].title);
-    if (title != null){
-        var description = prompt("Edit Card Description:",cards[idx].description);
-    }
-    if (title == null || description == null){
-        // nth happens
+function editCard(){
+    let title = document.getElementById('editCardTitle').value;
+    let description = document.getElementById('editCardDesc').value;
+    if (title == ""){
+        alert("Error! Please do not leave title blank");
     } else {
-        let numb = cards[idx].columnId;
+        let numb = editCardObj.columnId;
         var data = `title=${title}&description=${description}&columnId=${numb}`;
-        httpPut('http://localhost:3000/cards/' + ev, data, function(response){
+        httpPut('http://localhost:3000/cards/' + editCardObj.id, data, function(response){
             getJSONCol();
+            closeModal();
         })
     }
 }
-
-function newCard(ev){
-    var title = prompt("New Card Title","");
-    if (title != null){
-        var description = prompt("New Card Description:","");
-    }
+function newCard(){
+    let title = document.getElementById('newCardTitle').value;
+    let description = document.getElementById('newCardDesc').value;
     let checkDuplicateTitle = false;
     for (var i = 0 ; i < cards.length; i++){
         if (title == cards[i].title){
             checkDuplicateTitle = true;
         }
     }
-    if (title == null || description == null){
-        // nth happens
+    if (title == ""){
+        alert("Error! Please do not leave title blank");
     } else if (checkDuplicateTitle) {
         alert("Error! Duplicate Card Title");
     } else {
-        let numb = ev.path[2].children[1].id;
+        let numb = newCardColId;
         var data = `title=${title}&description=${description}&columnId=${numb}`;
         httpPost('http://localhost:3000/cards', data, function(response){
             getJSONCol();
+            closeModal();
         })
     }
 }
@@ -232,3 +228,40 @@ function drop(ev) {
     }
 }
 
+var createModal = document.getElementById('createModal');
+var modalBtn = document.getElementById('modalBtn');
+var closeBtn = document.getElementsByClassName('closeBtn')[0];
+var closeBtn2 = document.getElementsByClassName('closeBtn2')[0];
+var editModal = document.getElementById('editModal');
+
+modalBtn.addEventListener('click', openModal);
+closeBtn.addEventListener('click', closeModal);
+closeBtn2.addEventListener('click', closeModal);
+window.addEventListener('click', clickOutside);
+
+function openModal(ev){
+    newCardColId = ev;
+    createModal.style.display = 'block';
+}
+
+function closeModal(){
+    createModal.style.display = 'none';
+    editModal.style.display = 'none';
+    document.getElementById('newCardTitle').value = "";
+    document.getElementById('newCardDesc').value = "";
+}
+
+function clickOutside(e){
+    if (e.target == createModal || e.target == editModal){
+        createModal.style.display = 'none';
+        editModal.style.display = 'none';
+    }
+}
+
+function openEditModal(id){
+    let idx = cards.findIndex(p => p.id == id);
+    editCardObj = cards[idx];
+    document.getElementById('editCardTitle').value = editCardObj.title;
+    document.getElementById('editCardDesc').value = editCardObj.description;
+    editModal.style.display = 'block';
+}

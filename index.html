@@ -13,6 +13,51 @@
         <li><a class="active" href="#">Maltem</a></li>
         <li style="float:right;"><a href="#">Trello-Like</a></li>
     </ul>
+
+    <button id="modalBtn" class="button" style="visibility:hidden;font-size: 0px;">click here</button>
+
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="closeBtn">&times;</span>
+                <h4>Add New Card</h4>
+            </div>
+            <div class="modal-body">
+                <p>Title (Required)</p>
+                <input type="text" placeholder="Card Title" class="input-text" id="newCardTitle">
+                <br>
+                <p>Description (optional)</p>
+                <textarea name="desc" id="newCardDesc" class="input-text" rows="5" placeholder="Describe the card information."></textarea>
+            </div>
+            <br>
+            <div class="modal-footer">
+                <button class="buttonCreate" onclick="newCard()">Create</button>
+                <button class="buttonCancel" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="closeBtn2">&times;</span>
+                <h4>Edit Card</h4>
+            </div>
+            <div class="modal-body">
+                <p>Title (Required)</p>
+                <input type="text" placeholder="Card Title" class="input-text" id="editCardTitle">
+                <br>
+                <p>Description (optional)</p>
+                <textarea name="desc" id="editCardDesc" class="input-text" rows="5" placeholder="Describe the card information."></textarea>
+            </div>
+            <br>
+            <div class="modal-footer">
+                <button class="buttonCreate" onclick="editCard()">Update</button>
+                <button class="buttonCancel" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <br> 
     <div class="canvas">
         <div class="board" id="board">  
@@ -50,7 +95,7 @@
                     </h3>
                 <div class="list-cards" id="${col[i].id}">
                 </div>
-                <h3 style="cursor:pointer;" onclick="newCard(event)" id="myBtn">
+                <h3 style="cursor:pointer;" id="modalBtn" onclick="openModal(${col[i].id})">
                 <strong>+ Add another card</strong></h3>
             </div>
                 `;
@@ -64,7 +109,7 @@
                             <div class="container">
                                 <h4 class="card-title"><b>${cards[j].title}</b>
                                 <button class="btn" style="float:right;" onclick="deleteCard(${cards[j].id})"><i class="fa fa-trash"></i></button>
-                                <button class="btn" style="float:right;" onclick="editCard(${cards[j].id})"><i class="fa fa-edit"></i></button> 
+                                <button class="btn" style="float:right;" onclick="openEditModal(${cards[j].id})"><i class="fa fa-edit"></i></button> 
                                 </h4>
                                 <div class="card-content">
                                     <p>${cards[j].description}</p>
