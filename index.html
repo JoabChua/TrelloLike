@@ -12,112 +12,122 @@
         <li><a class="active" href="#">Maltem</a></li>
         <li style="float:right;"><a href="#">Trello-Like</a></li>
     </ul>
-
     <br>
     <div class="canvas">
-        <div class="board">
-            <div class="list-wrapper">
-                <h3><strong>Expired!</strong></h3>
-                <div class="list-cards">
-                    <div class="card">
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                        </div>
-                    </div>
-                </div>
-                <h3 style="cursor:pointer;"><strong>+ Add another card</strong></h3>
-            </div>
-            <div class="list-wrapper">
-                <h3><strong>Things to do!</strong></h3>
-                <div class="card">
-                    <div class="container">
-                        <h4><b>John Doe</b></h4>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="container">
-                        <h4><b>John Doe</b></h4>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="container">
-                        <h4><b>John Doe</b></h4>
-                    </div>
-                </div>
-            </div>
-            <div class="list-wrapper">
-                <h3><strong>Done!</strong></h3>
-                <div class="list-cards">
-                    <div class="card">
-                        <div class="container">
-                            <h4><b>John Doe</b></h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="list-wrapper" style="cursor:pointer;">
-                <h3><strong>Add another list</strong><a type="button" style="float:right;padding-right:10px;">+</a></h3>
-                <input type="text" placeholder="List name" 
-                style="width:85%;margin:10px;border-color: aqua;border-radius: 10px;padding-left:10px;font-size:20px;">
-            </div>
+        <div class="board" id="board">
+            
         </div>
     </div>
 </body>
+
+
 <script src="./public//main.js"></script>
 <script>
-    // window.onload = function test() {
-    //     console.log("testing");
-    //     httpGetAsync('http://localhost:3000/columns', function(response) {
-    //         var json = JSON.parse(response);
-    //         console.log(json);
-    //     });
-    // }
-    // window.onload = function test() {
-    //     console.log("testing");
-    //     httpPost('http://localhost:3000/columns', "title=Column 3", function(response) {
-    //         var json = JSON.parse(response);
-    //         console.log(json);
-    //     });
-    // }
+    var col = [];
+    var cards = [];
+
+    window.onload = function startup() {
+        alertSize();
+        getJSONCol();
+    }
+
+    function dropdownContent(){
+        var acc = document.getElementsByClassName("card-title");
+        // console.log(acc);
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+            // this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+            panel.style.display = "none";
+            } else {
+            panel.style.display = "block";
+            }
+        });
+        }
+    }
+
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        ev.target.appendChild(document.getElementById(data));
+    }
+
+    function getJSONCol() {
+        httpGet('http://localhost:3000/columns', function(response) {
+            col = JSON.parse(response);
+            getJSONCard();
+        });
+    }
+
+    function getJSONCard() {
+        httpGet('http://localhost:3000/cards', function(response) {
+            cards = JSON.parse(response);
+            setColCards();
+        });
+    }
+
+    function setColCards(){
+        console.log(col);
+        console.log(cards);
+        var fullView = [];
+        var embedView = [];
+        for (var i = 0; i < col.length; i++){
+            fullView[i] = `
+            <div class="list-wrapper" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <h3><strong>${col[i].title}</strong></h3>
+                <div id="${col[i].id}">
+                </div>
+            </div>
+                `;
+            for (var j=0; j<cards.length; j++){
+                if(cards[j].columnId == col[i].id){
+                    if(embedView[i] == undefined){
+                        embedView[i] = "";
+                    }
+                    embedView[i] += `
+                    <div class="list-cards" draggable="true" ondragstart="drag(event)">
+                        <div class="card" draggable="true" ondragstart="drag(event)">
+                            <div class="container">
+                                <h4 class="card-title"><b>${cards[j].title}</b></h4>
+                                <div class="card-content">
+                                    <p>${cards[j].description}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    ` ;
+                }
+            }
+        }
+        setTimeout(() => {
+            for (var i = 0; i < col.length; i++){
+                document.getElementById(col[i].id).innerHTML = embedView[i];
+                document.getElementById(col[i].id).innerHTML += `
+                <h3 style="cursor:pointer;"><strong>+ Add another card</strong></h3>`;
+            }
+            dropdownContent();
+        }, 10);
+        document.getElementById("board").innerHTML = fullView;
+        document.getElementById("board").innerHTML += `
+        <div class="list-wrapper" style="cursor:pointer;">
+            <h3 onclick="toggleInput()"><strong>Add another list</strong><a type="button" style="float:right;padding-right:10px;">+</a></h3>
+            <div id="togggleList" style="display:none;">
+                <input id="newlist" type="text" placeholder="List name">
+                <button class="addBtn">Add List</button>
+            </div>
+        </div>
+        `;
+    }
 </script>
 </html>

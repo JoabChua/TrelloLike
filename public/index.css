@@ -4,6 +4,7 @@ ul {
     padding: 0;
     overflow: hidden;
     background-color: #333;
+    opacity: 0.8;
 }
 
 li {
@@ -60,25 +61,27 @@ li a:hover:not(.active) {
 .canvas {
     flex-grow: 1;
     position: relative;
-    height: 540px;
+    /* height: 554px; */
 }
 
 .card {
     /* Add shadows to create the "card" effect */
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
+    transition: 0.4s;
   }
   
   /* On mouse-over, add a deeper shadow */
-  .card:hover {
+  .card-title:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    background-color: gold;
   }
-  
-  /* Add some padding inside the card container */
-  .container {
-    padding: 2px 16px;
-    background-color: white;
-    margin: 8px;
+
+  .card-content {
+    padding: 0 18px;
+    background-color: antiquewhite;
+    display: none;
+    overflow: hidden;
+    white-space: normal;
   }
 
   .list-cards {
@@ -89,7 +92,7 @@ li a:hover:not(.active) {
     margin: 0 4px;
     padding: 0 4px;
     z-index: 1;
-    max-height: 420px;
+    max-height: 410px;
 }
 
 h3 {
@@ -98,4 +101,42 @@ h3 {
 
 .spacer {
     flex: 1 1 0;
+}
+
+#newlist {
+    width:85%;
+    margin:10px;
+    border-color: aqua;
+    border-radius: 10px;
+    padding-left:10px;
+    font-size:20px;
+}
+
+body {
+    background-color: pink;
+}
+
+.addBtn {
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50; /* Green */
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    font-size: 16px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.addBtn:hover {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+.card-title {
+    /* margin: 5px 0px; */
+    white-space: normal;
+    padding: 2px 16px;
+    background-color: white;
+    margin: 8px 0px;
 }
