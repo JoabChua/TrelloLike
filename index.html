@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="./public/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -13,11 +14,23 @@
         <li style="float:right;"><a href="#">Trello-Like</a></li>
     </ul>
     <br>
+    
     <div class="canvas">
         <div class="board" id="board">
             
         </div>
     </div>
+
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Some text in the Modal..</p>
+        </div>
+        
+    </div>
+    
 </body>
 
 
@@ -33,9 +46,7 @@
 
     function dropdownContent(){
         var acc = document.getElementsByClassName("card-title");
-        // console.log(acc);
         var i;
-
         for (i = 0; i < acc.length; i++) {
         acc[i].addEventListener("click", function() {
             // this.classList.toggle("active");
@@ -77,12 +88,50 @@
         });
     }
 
+    function deleteCard(ev){
+        console.log(ev);
+        httpDelete('http://localhost:3000/cards/' + ev, function(response) {
+            // let temp = JSON.parse(response);
+            getJSONCol();
+        });
+    }
+
+    function newCard(ev){
+        var title = prompt("New Card Title","");
+        var description = prompt("New Card Description:","");
+        if (title == null || description == null){
+            // alert("Card creation cancelled!")
+        } else {
+            let numb = ev.path[2].id;
+            var data = `title=${title}&description=${description}&columnId=${numb}`;
+            httpPost('http://localhost:3000/cards', data, function(response){
+                getJSONCol();
+            })
+        }
+    }
+
+    function newList(ev){
+        if (ev.keyCode === 13) {
+            console.log(document.getElementById('newlist').value);
+            var title = document.getElementById('newlist').value;
+            if (title != ""){
+                var data = `title=${title}`;
+                httpPost('http://localhost:3000/columns', data, function(response){
+                    getJSONCol();
+                })
+            }
+        } else {
+            // ev.preventDefault();
+        }
+    }
+
     function setColCards(){
         console.log(col);
         console.log(cards);
         var fullView = [];
         var embedView = [];
         for (var i = 0; i < col.length; i++){
+            embedView[i] = "";
             fullView[i] = `
             <div class="list-wrapper" ondrop="drop(event)" ondragover="allowDrop(event)">
                 <h3><strong>${col[i].title}</strong></h3>
@@ -99,7 +148,11 @@
                     <div class="list-cards" draggable="true" ondragstart="drag(event)">
                         <div class="card" draggable="true" ondragstart="drag(event)">
                             <div class="container">
-                                <h4 class="card-title"><b>${cards[j].title}</b></h4>
+                                <h4 class="card-title"><b>${cards[j].title}</b>
+                                    <button class="btn" style="float:right;" onclick="deleteCard(${cards[j].id})"><i class="fa fa-trash"></i></button>
+                                    <button class="btn" style="float:right;" onclick="editCard(event)"><i class="fa fa-edit"></i></button>
+                                    </h4>
+                                
                                 <div class="card-content">
                                     <p>${cards[j].description}</p>
                                 </div>
@@ -110,11 +163,13 @@
                 }
             }
         }
+        
         setTimeout(() => {
             for (var i = 0; i < col.length; i++){
                 document.getElementById(col[i].id).innerHTML = embedView[i];
                 document.getElementById(col[i].id).innerHTML += `
-                <h3 style="cursor:pointer;"><strong>+ Add another card</strong></h3>`;
+                <h3 style="cursor:pointer;" onclick="newCard(event)" id="myBtn">
+                    <strong>+ Add another card</strong></h3>`;
             }
             dropdownContent();
         }, 10);
@@ -123,8 +178,8 @@
         <div class="list-wrapper" style="cursor:pointer;">
             <h3 onclick="toggleInput()"><strong>Add another list</strong><a type="button" style="float:right;padding-right:10px;">+</a></h3>
             <div id="togggleList" style="display:none;">
-                <input id="newlist" type="text" placeholder="List name">
-                <button class="addBtn">Add List</button>
+                <input id="newlist" type="text" placeholder="List name" onkeypress="return newList(event)">
+                <button class="addBtn" onclick="newList();">Add List</button>
             </div>
         </div>
         `;
