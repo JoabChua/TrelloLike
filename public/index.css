@@ -78,7 +78,7 @@ li a:hover:not(.active) {
 
   .card-content {
     padding: 0 18px;
-    background-color: antiquewhite;
+    background-color:cornsilk;
     display: none;
     overflow: hidden;
     white-space: normal;
@@ -134,12 +134,16 @@ body {
 }
 
 .card-title {
-    /* margin: 5px 0px; */
     white-space: normal;
     padding: 2px 16px;
     background-color: white;
-    margin: 8px 0px;
+    margin: 8px 0px 0px 0px;
 }
+
+/* .container {
+    background-color: white;
+    margin: 8px 0px;
+  } */
 
 /* The Modal (background) */
 .modal {

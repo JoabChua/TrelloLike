@@ -13,7 +13,7 @@
         <li><a class="active" href="#">Maltem</a></li>
         <li style="float:right;"><a href="#">Trello-Like</a></li>
     </ul>
-    <br>
+    <br> 
     <div class="canvas">
         <div class="board" id="board">  
         </div>
@@ -35,38 +35,6 @@
     window.onload = function startup() {
         alertSize();
         getJSONCol();
-    }
-
-    function allowDrop(ev) {
-        ev.preventDefault();
-    }
-
-    function drag(ev, id) {
-        cardShift = cards[id-1];
-        dragDiff = ev.screenX;
-    }
-
-    function drop(ev) {
-        dropDiff = ev.screenX;
-        let diff = (dragDiff - dropDiff);
-        let numOfCol = Math.round(Math.abs(dragDiff - dropDiff) / 300)
-        if (diff > 250){
-            finalCol = (parseInt(cardShift.columnId) - numOfCol).toString();
-            cardId = cardShift.id;
-            var data = `columnId=${finalCol}`;
-            httpPatch('http://localhost:3000/cards/' + cardId, data, function(response){
-                getJSONCol();
-            });
-        } else if (diff < -250){
-            finalCol = (parseInt(cardShift.columnId) + numOfCol).toString();
-            cardId = cardShift.id;
-            var data = `columnId=${finalCol}`;
-            httpPatch('http://localhost:3000/cards/' + cardId, data, function(response){
-                getJSONCol();
-            });
-        } else {
-            // nth happens
-        }
     }
 
     function setColCards(){
@@ -95,10 +63,9 @@
                         <div class="card" draggable="true" ondragstart="drag(event,${cards[j].id})" id="card${cards[j].id}">
                             <div class="container">
                                 <h4 class="card-title"><b>${cards[j].title}</b>
-                                    <button class="btn" style="float:right;" onclick="deleteCard(${cards[j].id})"><i class="fa fa-trash"></i></button>
-                                    <button class="btn" style="float:right;" onclick="editCard(${cards[j].id})"><i class="fa fa-edit"></i></button> 
+                                <button class="btn" style="float:right;" onclick="deleteCard(${cards[j].id})"><i class="fa fa-trash"></i></button>
+                                <button class="btn" style="float:right;" onclick="editCard(${cards[j].id})"><i class="fa fa-edit"></i></button> 
                                 </h4>
-                                
                                 <div class="card-content">
                                     <p>${cards[j].description}</p>
                                 </div>
@@ -108,7 +75,6 @@
                 }
             }
         }
-        // console.log(embedView);
         setTimeout(() => {
             for (var i = 0; i < col.length; i++){
                 document.getElementById(col[i].id).innerHTML = embedView[i];

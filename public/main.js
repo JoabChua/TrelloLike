@@ -117,14 +117,16 @@ function deleteCard(ev){
     });
 }
 
-function editCard(ev){
-    console.log(ev);
-    var title = prompt("Edit Card Title",cards[ev-1].title);
-    var description = prompt("Edit Card Description:",cards[ev-1].description);
+function editCard(id){
+    let idx = cards.findIndex(p => p.id == id);
+    var title = prompt("Edit Card Title",cards[idx].title);
+    if (title != null){
+        var description = prompt("Edit Card Description:",cards[idx].description);
+    }
     if (title == null || description == null){
         // nth happens
     } else {
-        let numb = cards[ev-1].columnId;
+        let numb = cards[idx].columnId;
         var data = `title=${title}&description=${description}&columnId=${numb}`;
         httpPut('http://localhost:3000/cards/' + ev, data, function(response){
             getJSONCol();
@@ -134,7 +136,9 @@ function editCard(ev){
 
 function newCard(ev){
     var title = prompt("New Card Title","");
-    var description = prompt("New Card Description:","");
+    if (title != null){
+        var description = prompt("New Card Description:","");
+    }
     let checkDuplicateTitle = false;
     for (var i = 0 ; i < cards.length; i++){
         if (title == cards[i].title){
@@ -142,14 +146,12 @@ function newCard(ev){
         }
     }
     if (title == null || description == null){
-        alert("Card creation cancelled!");
+        // nth happens
     } else if (checkDuplicateTitle) {
         alert("Error! Duplicate Card Title");
     } else {
         let numb = ev.path[2].children[1].id;
-        // console.log(ev);
         var data = `title=${title}&description=${description}&columnId=${numb}`;
-        // console.log(data);
         httpPost('http://localhost:3000/cards', data, function(response){
             getJSONCol();
         })
@@ -157,7 +159,6 @@ function newCard(ev){
 }
 
 function newList(ev){
-    // console.log(ev);
     if (ev.keyCode === 13 || ev.type == "click") {
         var title = document.getElementById('newlist').value;
         let checkDuplicateTitle = false;
@@ -192,10 +193,42 @@ function editCol(ev){
     } else {
         let numb = ev
         var data = `title=${title}`;
-        // console.log(data);
         httpPut('http://localhost:3000/columns/' + ev, data, function(response){
             getJSONCol();
         })
+    }
+}
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev, id) {
+    let idx = cards.findIndex(p => p.id == id);
+    cardShift = cards[idx];
+    dragDiff = ev.screenX;
+}
+
+function drop(ev) {
+    dropDiff = ev.screenX;
+    let diff = (dragDiff - dropDiff);
+    let numOfCol = Math.round(Math.abs(dragDiff - dropDiff) / 300)
+    if (diff > 250){
+        finalCol = (parseInt(cardShift.columnId) - numOfCol).toString();
+        cardId = cardShift.id;
+        var data = `columnId=${finalCol}`;
+        httpPatch('http://localhost:3000/cards/' + cardId, data, function(response){
+            getJSONCol();
+        });
+    } else if (diff < -250){
+        finalCol = (parseInt(cardShift.columnId) + numOfCol).toString();
+        cardId = cardShift.id;
+        var data = `columnId=${finalCol}`;
+        httpPatch('http://localhost:3000/cards/' + cardId, data, function(response){
+            getJSONCol();
+        });
+    } else {
+        // nth happens
     }
 }
 
