@@ -49,7 +49,6 @@
         var i;
         for (i = 0; i < acc.length; i++) {
         acc[i].addEventListener("click", function() {
-            // this.classList.toggle("active");
             var panel = this.nextElementSibling;
             if (panel.style.display === "block") {
             panel.style.display = "none";
@@ -90,16 +89,19 @@
 
     function deleteCard(ev){
         httpDelete('http://localhost:3000/cards/' + ev, function(response) {
-            // let temp = JSON.parse(response);
             getJSONCol();
         });
+    }
+
+    function editCard(ev){
+        console.log(ev);
     }
 
     function newCard(ev){
         var title = prompt("New Card Title","");
         var description = prompt("New Card Description:","");
         if (title == null || description == null){
-            // alert("Card creation cancelled!")
+            alert("Card creation cancelled!")
         } else {
             let numb = ev.path[2].children[1].id;
             // console.log(ev);
@@ -112,8 +114,8 @@
     }
 
     function newList(ev){
-        if (ev.keyCode === 13) {
-            console.log(document.getElementById('newlist').value);
+        // console.log(ev);
+        if (ev.keyCode === 13 || ev.type == "click") {
             var title = document.getElementById('newlist').value;
             if (title != ""){
                 var data = `title=${title}`;
@@ -121,8 +123,26 @@
                     getJSONCol();
                 })
             }
+        }
+    }
+
+    function deleteCol(ev){
+        httpDelete('http://localhost:3000/columns/' + ev, function(response) {
+            getJSONCol();
+        });
+    }
+
+    function editCol(ev){
+        var title = prompt("Edit Column Name:",col[ev-1].title);
+        if (title == null){
+            // nth happens
         } else {
-            // ev.preventDefault();
+            let numb = ev
+            var data = `title=${title}`;
+            // console.log(data);
+            httpPut('http://localhost:3000/columns/' + ev, data, function(response){
+                getJSONCol();
+            })
         }
     }
 
@@ -135,7 +155,10 @@
             embedView[i] = "";
             fullView[i] = `
             <div class="list-wrapper" ondrop="drop(event)" ondragover="allowDrop(event)">
-                <h3><strong>${col[i].title}</strong></h3>
+                <h3><strong>${col[i].title}</strong>
+                <button class="btn" style="float:right;" onclick="deleteCol(${col[i].id})"><i class="fa fa-trash"></i></button>
+                <button class="btn" style="float:right;" onclick="editCol(${col[i].id})"><i class="fa fa-edit"></i></button>    
+                    </h3>
                 <div class="list-cards" draggable="true" ondragstart="drag(event)" id="${col[i].id}">
                 </div>
                 <h3 style="cursor:pointer;" onclick="newCard(event)" id="myBtn">
@@ -151,10 +174,8 @@
                         <div class="card" draggable="true" ondragstart="drag(event)">
                             <div class="container">
                                 <h4 class="card-title"><b>${cards[j].title}</b>
-                                <span>
                                     <button class="btn" style="float:right;" onclick="deleteCard(${cards[j].id})"><i class="fa fa-trash"></i></button>
-                                    <button class="btn" style="float:right;" onclick="editCard(event)"><i class="fa fa-edit"></i></button>    
-                                </span>
+                                    <button class="btn" style="float:right;" onclick="editCard(${cards[j].id})"><i class="fa fa-edit"></i></button> 
                                 </h4>
                                 
                                 <div class="card-content">
@@ -182,7 +203,7 @@
             <h3 onclick="toggleInput()"><strong>Add another list</strong><a type="button" style="float:right;padding-right:10px;">+</a></h3>
             <div id="togggleList" style="display:none;">
                 <input id="newlist" type="text" placeholder="List name" onkeypress="return newList(event)">
-                <button class="addBtn" onclick="newList();">Add List</button>
+                <button class="addBtn" onclick="newList(event);">Add List</button>
             </div>
         </div>
         `;
