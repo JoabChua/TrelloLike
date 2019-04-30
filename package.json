@@ -11,6 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/jest": "^24.0.12",
     "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "jest": "^24.7.1"
   }
 }

@@ -1,6 +1,3 @@
-var ColIdForNewCard;
-var editCardObj;
-
 // Http GET method to fetch data from db.json file
 function httpGet(url, callback) {
     var xhr = new XMLHttpRequest();
@@ -230,10 +227,12 @@ function drop(ev) {
 // intializing modal
 function initModal() {
     var createModal = document.getElementById('createModal');
+    var modalBtn = document.getElementById('modalBtn');
     var closeBtn = document.getElementsByClassName('closeBtn')[0];
     var closeBtn2 = document.getElementsByClassName('closeBtn2')[0];
     var editModal = document.getElementById('editModal');
     // add listener to modal 
+    modalBtn.addEventListener('click', openModal);
     closeBtn.addEventListener('click', closeModal);
     closeBtn2.addEventListener('click', closeModal);
     window.addEventListener('click', clickOutside);
@@ -242,7 +241,6 @@ function initModal() {
 // opens create modal
 function openModal(ev){
     ColIdForNewCard = ev;
-    console.log(ColIdForNewCard);
     createModal.style.display = 'block';
 }
 // closes both create and edit modals
@@ -267,3 +265,20 @@ function openEditModal(id){
     document.getElementById('editCardDesc').value = editCardObj.description;
     editModal.style.display = 'block';
 }
+
+test('if httpGet fns exists', () => {
+    expect(typeof httpGet).toEqual('function');
+});
+
+test('test fetch JSON columns', () => {
+    httpGet('http://localhost:3000/columns', (response) => {
+        col = JSON.parse(response);
+        expect(col.length).toEqual(2);
+    })
+})
+test('test fetch JSON cards', () => {
+    httpGet('http://localhost:3000/cards', (response) => {
+        cards = JSON.parse(response);
+        expect(cards.length).toEqual(8);
+    })
+})

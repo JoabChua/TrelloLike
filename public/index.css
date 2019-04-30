@@ -29,7 +29,7 @@ li a:hover:not(.active) {
 }
 
 .active {
-    background-color: #4CAF50;
+    background-color: rgb(233, 58, 111);
 }
 
 .list-wrapper {

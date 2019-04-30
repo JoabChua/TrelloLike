@@ -6,12 +6,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Maltem Test</title>
+    <link rel="icon" type="image/png" href="./public/maltem-icon.png">
+    <title>Maltem</title>
 </head>
 <body>
     <!-- basic navbar -->
     <ul>
-        <li><a class="active" href="#">Maltem</a></li>
+        <li><a class="active" href="#"><img src="./public/maltem-icon.png" alt="maltem-icon" width="14px"> Maltem</a></li>
         <li style="float:right;"><a href="#">Trello-Like</a></li>
     </ul>    
     <!-- Modal for creating new cards -->
@@ -94,7 +95,7 @@
                     </h3>
                 <div class="list-cards" id="${col[i].id}">
                 </div>
-                <h3 style="cursor:pointer;" id="modalBtn" onclick="openModal(${col[i].id})">
+                <h3 style="cursor:pointer;" onclick="openModal(${col[i].id})">
                 <strong>+ Add another card</strong></h3>
             </div>
                 `;
