@@ -228,16 +228,19 @@ function drop(ev) {
     }
 }
 // intializing modal
-var createModal = document.getElementById('createModal');
-var modalBtn = document.getElementById('modalBtn');
-var closeBtn = document.getElementsByClassName('closeBtn')[0];
-var closeBtn2 = document.getElementsByClassName('closeBtn2')[0];
-var editModal = document.getElementById('editModal');
-// add listener to modal 
-modalBtn.addEventListener('click', openModal);
-closeBtn.addEventListener('click', closeModal);
-closeBtn2.addEventListener('click', closeModal);
-window.addEventListener('click', clickOutside);
+function initModal() {
+    var createModal = document.getElementById('createModal');
+    var modalBtn = document.getElementById('modalBtn');
+    var closeBtn = document.getElementsByClassName('closeBtn')[0];
+    var closeBtn2 = document.getElementsByClassName('closeBtn2')[0];
+    var editModal = document.getElementById('editModal');
+    // add listener to modal 
+    modalBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    closeBtn2.addEventListener('click', closeModal);
+    window.addEventListener('click', clickOutside);
+};
+
 // opens create modal
 function openModal(ev){
     ColIdForNewCard = ev;

@@ -9,13 +9,12 @@
     <title>Maltem Test</title>
 </head>
 <body>
+    <!-- basic navbar -->
     <ul>
         <li><a class="active" href="#">Maltem</a></li>
         <li style="float:right;"><a href="#">Trello-Like</a></li>
-    </ul>
-
-    <button id="modalBtn" class="button" style="visibility:hidden;font-size: 0px;">click here</button>
-
+    </ul>    
+    <!-- Modal for creating new cards -->
     <div class="modal" id="createModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -36,7 +35,7 @@
             </div>
         </div>
     </div>
-
+    <!-- Modal for editing cards -->
     <div class="modal" id="editModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -136,6 +135,7 @@
             </div>
         </div>
         `;
+        initModal();
     }
 </script>
 </html>
