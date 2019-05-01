@@ -134,10 +134,10 @@
         document.getElementById("board").innerHTML = fullView;
         document.getElementById("board").innerHTML += `
         <div class="list-wrapper" style="cursor:pointer;">
-            <h3 onclick="toggleInput()"><strong>Add another list</strong><a type="button" style="float:right;padding-right:10px;">+</a></h3>
+            <h3 onclick="toggleInput()" id="addList"><strong>Add another list</strong><a type="button" style="float:right;padding-right:10px;">+</a></h3>
             <div id="togggleList" style="display:none;">
-                <input id="newlist" type="text" placeholder="List name" onkeypress="return newList(event)">
-                <button class="addBtn" onclick="newList(event);">Add List</button>
+                <input id="newCol" type="text" placeholder="List name" onkeypress="return newCol(event)">
+                <button class="addBtn" onclick="newCol(event);" id="addNewListBtn">Add List</button>
             </div>
         </div>
         `;

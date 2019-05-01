@@ -1,10 +1,40 @@
+var mockData = {
+    "columns": [
+      {
+        "title": "Column 1",
+        "id": 1
+      },
+      {
+        "title": "Column 2",
+        "id": 2
+      }
+    ],
+    "cards": [
+      {
+        "id": 1,
+        "title": "Card 1",
+        "description": "Nulla porttitor erat a sollicitudin volutpat.",
+        "columnId": "1"
+      },
+      {
+        "id": 2,
+        "title": "Card 2",
+        "description": "Quisque id scelerisque felis, sit amet scelerisque nunc.",
+        "columnId": "2"
+      },
+      {
+        "id": 3,
+        "title": "Card 3",
+        "description": "Quisque id scelerisque felis, sit amet scelerisque nunc.",
+        "columnId": "2"
+      }
+    ]
+  };
 // Http GET method to fetch data from db.json file
 function httpGet(url, callback) {
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("readystatechange", function (responseText) {
-        if (this.readyState === 4) {
-            callback(this.responseText);
-        }
+        return this.responseText;
     });
     xhr.open("GET", url);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -58,16 +88,7 @@ function httpDelete(url, callback) {
     xhr.open("DELETE", url, true); // true for asynchronous 
     xhr.send(null);
 }
-// method to resize the columns based on device window height
-function alertSize() {
-    var myWidth = 0, myHeight = 0;
-    if( typeof( window.innerWidth ) == 'number' ) {
-        //Non-IE
-        myWidth = window.innerWidth;
-        myHeight = window.innerHeight;
-    }
-        document.getElementsByClassName("canvas")[0].style.height = myHeight - 80 + 'px';
-}
+
 // method to toggle add another list input
 function toggleInput() {
     var x = document.getElementById("togggleList");
@@ -90,105 +111,6 @@ function dropdownContent(){
         panel.style.display = "block";
         }
     });
-    }
-}
-// get column data from db.json
-function getJSONCol() {
-    httpGet('http://localhost:3000/columns', function(response) {
-        col = JSON.parse(response);
-        getJSONCard();
-    });
-}
-// get card data from db.json
-function getJSONCard() {
-    httpGet('http://localhost:3000/cards', function(response) {
-        cards = JSON.parse(response);
-        setColCards();
-    });
-}
-// delete selected card from db.json
-function deleteCard(ev){
-    httpDelete('http://localhost:3000/cards/' + ev, function(response) {
-        getJSONCol();
-    });
-}
-// edit selected card from db.json
-function editCard(){
-    let title = document.getElementById('editCardTitle').value;
-    let description = document.getElementById('editCardDesc').value;
-    if (title == ""){
-        alert("Error! Please do not leave title blank");
-    } else {
-        let numb = editCardObj.columnId;
-        var data = `title=${title}&description=${description}&columnId=${numb}`;
-        httpPut('http://localhost:3000/cards/' + editCardObj.id, data, function(response){
-            getJSONCol();
-            closeModal();
-        })
-    }
-}
-// adding new card into db.json
-function newCard(){
-    let title = document.getElementById('newCardTitle').value;
-    let description = document.getElementById('newCardDesc').value;
-    let checkDuplicateTitle = false;
-    for (var i = 0 ; i < cards.length; i++){
-        if (title == cards[i].title){
-            checkDuplicateTitle = true;
-        }
-    }
-    if (title == ""){
-        alert("Error! Please do not leave title blank");
-    } else if (checkDuplicateTitle) {
-        alert("Error! Duplicate Card Title");
-    } else {
-        let numb = ColIdForNewCard;
-        var data = `title=${title}&description=${description}&columnId=${numb}`;
-        httpPost('http://localhost:3000/cards', data, function(response){
-            getJSONCol();
-            closeModal();
-        })
-    }
-}
-// adding new column to db.json
-function newList(ev){
-    if (ev.keyCode === 13 || ev.type == "click") {
-        var title = document.getElementById('newlist').value;
-        let checkDuplicateTitle = false;
-        for( var i = 0; i < col.length; i++){
-            if(title == col[i].title){
-                checkDuplicateTitle = true;
-            }
-        }
-        if (title == "") {
-            alert('Title cannot be empty string!');
-        } else if (checkDuplicateTitle) {
-            alert('Error! Duplicate Column title!');
-        } else {
-            var data = `title=${title}`;
-            httpPost('http://localhost:3000/columns', data, function(response){
-                getJSONCol();
-            })
-        }
-    }
-}
-// deleting column from db.sjon
-function deleteCol(ev){
-    httpDelete('http://localhost:3000/columns/' + ev, function(response) {
-        getJSONCol();
-    });
-}
-// edit column data from db.json
-function editCol(ev){
-    var title = prompt("Edit Column Name:",col[ev-1].title);
-    if (title == null){
-        // nth happens
-    } else {
-        let numb = ev
-        var data = `title=${title}`;
-        httpPut('http://localhost:3000/columns/' + ev, data, function(response){
-            getJSONCol();
-        })
     }
 }
 // allow drop event for draggerable object
@@ -265,30 +187,153 @@ function openEditModal(id){
     document.getElementById('editCardDesc').value = editCardObj.description;
     editModal.style.display = 'block';
 }
+// dummy test for jest
+function testJest(x){
+    return x;
+}
+// method to resize the columns based on device window height
+function alertSize() {
+    var myWidth = 0, myHeight = 0;
+    if( typeof( window.innerWidth ) == 'number' ) {
+        //Non-IE
+        myWidth = window.innerWidth;
+        myHeight = window.innerHeight;
+    }
+        return myHeight - 80 + 'px';
+}
+// adding new card into db.json
+function newCard(inputTitle,desc,colId){
+    if (inputTitle == ""){
+        return null
+    } else {
+        var data = `title=${inputTitle}&description=${desc}&columnId=${colId}`;
+        return data;
+    }
+}
+// edit selected card from db.json
+function editCard(editedTitle, desc, colId){
+    if (editedTitle == ""){
+        return null;
+    } else {
+        var data = `title=${editedTitle}&description=${desc}&columnId=${colId}`;
+        return data;
+    }
+}
+// adding new column to db.json
+function newCol(listTitle){
+        if (listTitle == "") {
+            return null;
+        } else {
+            let data = `title=${listTitle}`;
+            return data;
+        }
+}
+// edit column data from db.json
+function editCol(editTitle,colId){
+    if (editTitle == ""){
+        return null;
+    } else {
+        let data = `title=${editTitle}id=${colId}`;
+        return data;
+    }
+}
+// get column data from mockData.
+function getJSONCol() {
+    let colData = mockData.columns;
+    return colData;
+}
+// deleting column from db.sjon
+function deleteCol(){
+    let colData = mockData.columns;
+    colData = colData.slice(0, colData.length-1)
+    return colData;
+}
+// get card data from db.json
+function getJSONCard() {
+    let cardData = mockData.cards;
+    return cardData;
+}
+// delete selected card from db.json
+function deleteCard(){
+    let cardData = mockData.cards;
+    cardData = cardData.slice(0, cardData.length-1)
+    return cardData;
+}
 
 /***********************************************************/
 /********************* JEST TEST CASES *********************/
 /***********************************************************/
-test('if httpGet fns exists', () => {
+test('test if jest is working', () => {
+    const id = 8;
+    expect(testJest(id)).toEqual(8);
+});
+test('if HttpGet fns exists', () => {
     expect(typeof httpGet).toEqual('function');
 });
-test('test GET JSON columns', () => {
-    httpGet('http://localhost:3000/columns', (response) => {
-        col = JSON.parse(response);
-        expect(col.length).toEqual(2);
-    })
+test('test alertsize function works!', () => {
+    let height = window.innerHeight;
+    height = height - 80 + 'px';
+    expect(alertSize()).toEqual(height);
 });
-test('test GET JSON cards', () => {
-    httpGet('http://localhost:3000/cards', (response) => {
-        cards = JSON.parse(response);
-        expect(cards.length).toEqual(8);
-    })
+test('test newCard function works!', () => {
+    const title = "testingtitle";
+    const description = "testingdesc"
+    const colId = 1;
+    let expectData = `title=${title}&description=${description}&columnId=${colId}`;
+    expect(newCard(title,description,colId)).toEqual(expectData);
 });
-test('test POST JSON cards', () => {
-    var data = `title=Card10&description=testing&columnId=1`;
-    httpGet('http://localhost:3000/cards', (response) => {
-        created = JSON.parse(response);
-        expect(created.columnId).toEqual(2);
-    })
+test('test newCard Error works!', () => {
+    const title = "";
+    const description = "testingdesc"
+    const colId = 1;
+    let expectData = null;
+    expect(newCard(title,description,colId)).toEqual(expectData);
 });
-
+test('test editCard function works!', () => {
+    const title = "testingtitle";
+    const description = "testingdesc"
+    const colId = 1;
+    let expectData = `title=${title}&description=${description}&columnId=${colId}`;
+    expect(editCard(title,description,colId)).toEqual(expectData);
+});
+test('test editCard Error works!', () => {
+    const title = "";
+    const description = "testingdesc"
+    const colId = 1;
+    let expectData = null;
+    expect(editCard(title,description,colId)).toEqual(expectData);
+});
+test('test newList function works!', () => {
+    const title = "testingtitle";
+    let expectData = `title=${title}`;
+    expect(newCol(title)).toEqual(expectData);
+});
+test('test newList Error works!', () => {
+    const title = "";
+    let expectData = null;
+    expect(newCol(title)).toEqual(expectData);
+});
+test('test editList function works!', () => {
+    const title = "testingtitle";
+    const colId = 1;
+    let expectData = `title=${title}id=${colId}`;
+    expect(editCol(title,colId)).toEqual(expectData);
+});
+test('test editList Error works!', () => {
+    const title = "";
+    const colId = 1;
+    let expectData = null;
+    expect(editCol(title,colId)).toEqual(expectData);
+});
+test('test getJSONCol function works!', () => {
+    expect(getJSONCol().length).toEqual(2);
+});
+test('test getJSONCard function works!', () => {
+    expect(getJSONCard().length).toEqual(3);
+});
+test('test deleteCol function works!', () => {
+    expect(deleteCol().length).toEqual(1);
+});
+test('test deleteCard function works!', () => {
+    expect(deleteCard().length).toEqual(2);
+});

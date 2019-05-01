@@ -23,6 +23,12 @@
       "columnId": "1"
     },
     {
+      "id": 3,
+      "title": "Card 3",
+      "description": "Nulla porttitor erat a sollicitudin volutpat.",
+      "columnId": "1"
+    },
+    {
       "id": 4,
       "title": "Card 4",
       "description": "Quisque id scelerisque felis, sit amet scelerisque nunc.",
@@ -35,22 +41,10 @@
       "id": 5
     },
     {
-      "title": "Card 6",
-      "description": "oiqjeiowje12312",
+      "title": "Card 7",
+      "description": "iqweioioju12i3",
       "columnId": "1",
       "id": 6
-    },
-    {
-      "title": "Card 7",
-      "description": "oiqjweoijqw",
-      "columnId": "1",
-      "id": 7
-    },
-    {
-      "title": "Card 3",
-      "description": "oiweoi123",
-      "columnId": "2",
-      "id": 8
     }
   ]
 }

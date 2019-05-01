@@ -154,9 +154,9 @@ function newCard(){
     }
 }
 // adding new column to db.json
-function newList(ev){
+function newCol(ev){
     if (ev.keyCode === 13 || ev.type == "click") {
-        var title = document.getElementById('newlist').value;
+        var title = document.getElementById('newCol').value;
         let checkDuplicateTitle = false;
         for( var i = 0; i < col.length; i++){
             if(title == col[i].title){

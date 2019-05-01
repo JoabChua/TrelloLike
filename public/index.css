@@ -103,7 +103,7 @@ h3 {
     flex: 1 1 0;
 }
 
-#newlist {
+#newCol {
     width:85%;
     margin:10px;
     border-color: aqua;
@@ -249,7 +249,6 @@ top: -12px;
 .tooltip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black;
   }
   
   .tooltip .tooltiptext {
