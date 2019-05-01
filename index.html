@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="./public/index.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Browser Title and Icon -->
     <link rel="icon" type="image/png" href="./public/maltem-icon.png">
     <title>Maltem</title>
 </head>
@@ -13,7 +13,7 @@
     <!-- basic navbar -->
     <ul>
         <li><a class="active" href="#"><img src="./public/maltem-icon.png" alt="maltem-icon" width="14px"> Maltem</a></li>
-        <li style="float:right;"><a href="#">Trello-Like</a></li>
+        <li style="float: right;"><input type="text" placeholder="Search.." id="searchBar" onkeyup="searchFunc(event)"></li>
     </ul>    
     <!-- Modal for creating new cards -->
     <div class="modal" id="createModal">
@@ -77,11 +77,28 @@
     var finalCol;
     var cardId;
 
+    // onload webpage to set window height and fetch cards and column data
     window.onload = function startup() {
         alertSize();
         getJSONCol();
     }
 
+    // search bar filter function
+    function searchFunc(ev){
+        let input = document.getElementById('searchBar').value;
+        let filter = input.toUpperCase();
+        let card = document.getElementsByClassName('card');
+        for (var i = 0 ; i < card.length; i++){
+            const txtValue = card[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1){
+                card[i].style.display = "";
+            } else {
+                card[i].style.display = "none";
+            }
+        }
+    }
+
+    // set cards and columns into its own position
     function setColCards(){
         var fullView = [];
         var embedView = [];
@@ -91,9 +108,9 @@
             <div class="list-wrapper" ondrop="drop(event)" ondragover="allowDrop(event)">
                 <h3><strong>${col[i].title}</strong>
                 <button class="btn tooltip" style="float:right;margin-right:1rem;" onclick="deleteCol(${col[i].id})">
-                    <i class="fa fa-trash"></i><span class="tooltiptext">Delete</span></button>
+                    <img src="./public/trash.png" alt="Trash"><span class="tooltiptext">Delete</span></button>
                 <button class="btn tooltip" style="float:right;" onclick="editCol(${col[i].id})">
-                    <i class="fa fa-edit"></i><span class="tooltiptext">Edit</span></button>    
+                    <img src="./public/edit.png" alt="Edit"></i><span class="tooltiptext">Edit</span></button>    
                     </h3>
                 <div class="list-cards" id="${col[i].id}">
                 </div>
@@ -113,9 +130,9 @@
                                 </h4>
                                 <div class="card-content">
                                     <button class="btn tooltip" style="float:right;" onclick="deleteCard(${cards[j].id})">
-                                        <i class="fa fa-trash"></i><span class="tooltiptext">Delete</span></button>
+                                        <img src="./public/trash.png" alt="Trash"><span class="tooltiptext">Delete</span></button>
                                     <button class="btn tooltip" style="float:right;" onclick="openEditModal(${cards[j].id})">
-                                        <i class="fa fa-edit"></i><span class="tooltiptext">Edit</span></button>
+                                        <img src="./public/edit.png" alt="Edit"><span class="tooltiptext">Edit</span></button>
                                     <br>
                                     <p>${cards[j].description}</p>
                                 </div>
