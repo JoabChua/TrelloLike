@@ -116,6 +116,16 @@ body {
     background-color: pink;
 }
 
+.btn {
+    background-color: antiquewhite;
+    font-size:14px;
+}
+
+.btn:hover {
+    background-color: coral;
+
+}
+
 .addBtn {
     background-color: white;
     color: black;
@@ -235,3 +245,45 @@ top: -12px;
     border-radius: 5px;
     padding: 5px 0px 5px 10px;
 }
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 60px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 150%;
+    left: 165%;
+    margin-left: -60px;
+  }
+  
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+
+.btn:focus, .btn:visited, .btn:active, .btn::after  {
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none; 
+  }

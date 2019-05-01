@@ -266,19 +266,29 @@ function openEditModal(id){
     editModal.style.display = 'block';
 }
 
+/***********************************************************/
+/********************* JEST TEST CASES *********************/
+/***********************************************************/
 test('if httpGet fns exists', () => {
     expect(typeof httpGet).toEqual('function');
 });
-
-test('test fetch JSON columns', () => {
+test('test GET JSON columns', () => {
     httpGet('http://localhost:3000/columns', (response) => {
         col = JSON.parse(response);
         expect(col.length).toEqual(2);
     })
-})
-test('test fetch JSON cards', () => {
+});
+test('test GET JSON cards', () => {
     httpGet('http://localhost:3000/cards', (response) => {
         cards = JSON.parse(response);
         expect(cards.length).toEqual(8);
     })
-})
+});
+test('test POST JSON cards', () => {
+    var data = `title=Card10&description=testing&columnId=1`;
+    httpGet('http://localhost:3000/cards', (response) => {
+        created = JSON.parse(response);
+        expect(created.columnId).toEqual(2);
+    })
+});
+

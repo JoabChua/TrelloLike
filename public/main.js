@@ -242,7 +242,6 @@ function initModal() {
 // opens create modal
 function openModal(ev){
     ColIdForNewCard = ev;
-    console.log(ColIdForNewCard);
     createModal.style.display = 'block';
 }
 // closes both create and edit modals

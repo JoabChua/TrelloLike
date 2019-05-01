@@ -90,8 +90,10 @@
             fullView[i] = `
             <div class="list-wrapper" ondrop="drop(event)" ondragover="allowDrop(event)">
                 <h3><strong>${col[i].title}</strong>
-                <button class="btn" style="float:right;" onclick="deleteCol(${col[i].id})"><i class="fa fa-trash"></i></button>
-                <button class="btn" style="float:right;" onclick="editCol(${col[i].id})"><i class="fa fa-edit"></i></button>    
+                <button class="btn tooltip" style="float:right;margin-right:1rem;" onclick="deleteCol(${col[i].id})">
+                    <i class="fa fa-trash"></i><span class="tooltiptext">Delete</span></button>
+                <button class="btn tooltip" style="float:right;" onclick="editCol(${col[i].id})">
+                    <i class="fa fa-edit"></i><span class="tooltiptext">Edit</span></button>    
                     </h3>
                 <div class="list-cards" id="${col[i].id}">
                 </div>
@@ -108,10 +110,13 @@
                         <div class="card" draggable="true" ondragstart="drag(event,${cards[j].id})" id="card${cards[j].id}">
                             <div class="container">
                                 <h4 class="card-title"><b>${cards[j].title}</b>
-                                <button class="btn" style="float:right;" onclick="deleteCard(${cards[j].id})"><i class="fa fa-trash"></i></button>
-                                <button class="btn" style="float:right;" onclick="openEditModal(${cards[j].id})"><i class="fa fa-edit"></i></button> 
                                 </h4>
                                 <div class="card-content">
+                                    <button class="btn tooltip" style="float:right;" onclick="deleteCard(${cards[j].id})">
+                                        <i class="fa fa-trash"></i><span class="tooltiptext">Delete</span></button>
+                                    <button class="btn tooltip" style="float:right;" onclick="openEditModal(${cards[j].id})">
+                                        <i class="fa fa-edit"></i><span class="tooltiptext">Edit</span></button>
+                                    <br>
                                     <p>${cards[j].description}</p>
                                 </div>
                             </div>
