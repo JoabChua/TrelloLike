@@ -30,6 +30,7 @@ npm test
 1. This project can be further improved by implementing checks upon deletion. 
 2. The drag and drop component can be more intuitive and more seamless given more freedom on the use of other helper libraries. 
 3. More animations could have been added to improve on the user experience.
+4. UI testing can be implemented to increase the robustness of the application using puppeteer or robotframework. 
 
 ## Copyright
 
