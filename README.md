@@ -34,7 +34,7 @@ npm test
 
 ## Limitation
 
-I have to agree that this project is not coded in the most elegant way, given the time and freedom constraints that I am given. However, it fulfils all the functionalities that are required. 
+This project is not coded in the most elegant way, given the time and freedom of tools constraints. However, it fulfils all the functionalities that are required. 
 
 ## Copyright
 
