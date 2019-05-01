@@ -286,4 +286,12 @@ top: -12px;
     outline: 0;
     -webkit-box-shadow: none;
     box-shadow: none; 
-  }
+}
+.tooltip .tooltiptext {
+    opacity: 0;
+    transition: opacity 1s;
+}
+  
+  .tooltip:hover .tooltiptext {
+    opacity: 1;
+}
