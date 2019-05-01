@@ -32,10 +32,10 @@ npm test
 3. More animations could have been added to improve on the user experience.
 4. UI testing can be implemented to increase the robustness of the application using puppeteer or robotframework. 
 
-## Copyright
-
-This application is fully created from scratch by JoabChua without using any web application framework, instead using pure vanilla HTML, JS and CSS. 
-
 ## Limitation
 
 I have to agree that this project is not coded in the most elegant way, given the time and freedom constraints that I am given. However, it fulfils all the functionalities that are required. 
+
+## Copyright
+
+This application is fully created from scratch by JoabChua without using any web application framework, instead using pure vanilla HTML, JS and CSS. 
