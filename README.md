@@ -1,10 +1,10 @@
 # Trello Like Application
 
-### Usage
+## Usage
 
 This application is developed in a span of 2 days. The scope of this application is closely aligned with the requirement given by the company.
 
-### To run and test this application on local machine
+#### To run and test this application on local machine
 
 1. git clone from this repo.
 ```bash
@@ -37,4 +37,4 @@ This application is fully created from scratch by JoabChua without using any web
 
 ## Limitation
 
-I have to agree that this project is not coded in the most elegant way, given the time and freedom constraints that I am given. However, it fulfils all the functionalities that are required.
+I have to agree that this project is not coded in the most elegant way, given the time and freedom constraints that I am given. However, it fulfils all the functionalities that are required. 
